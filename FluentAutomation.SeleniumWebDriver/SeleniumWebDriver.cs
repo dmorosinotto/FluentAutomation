@@ -7,6 +7,11 @@ using System.Threading.Tasks;
 using FluentAutomation.Interfaces;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Remote;
+using OpenQA.Selenium.Chrome;
+using System.IO;
+using OpenQA.Selenium.PhantomJS;
+using FluentAutomation.Wrappers;
+using OpenQA.Selenium.IE;
 
 namespace FluentAutomation
 {
@@ -72,27 +77,29 @@ namespace FluentAutomation
                 container.Register<ICommandProvider, CommandProvider>();
                 container.Register<IExpectProvider, ExpectProvider>();
                 container.Register<IFileStoreProvider, LocalFileStoreProvider>();
-            
+
+                string driverPath = string.Empty;
+
                 switch (SeleniumWebDriver.SelectedBrowser)
                 {
                     case Browser.InternetExplorer:
-                        EmbeddedResources.UnpackFromAssembly("IEDriverServer32.exe", "IEDriverServer.exe", Assembly.GetAssembly(typeof(SeleniumWebDriver)));
-                        container.Register<IWebDriver, Wrappers.IEDriverWrapper>().AsMultiInstance();
+                        driverPath = EmbeddedResources.UnpackFromAssembly("IEDriverServer32.exe", "IEDriverServer.exe", Assembly.GetAssembly(typeof(SeleniumWebDriver)));
+                        container.Register<IWebDriver>((c, o) => { return new IEDriverWrapper(Path.GetDirectoryName(driverPath)); });
                         break;
                     case Browser.InternetExplorer64:
-                        EmbeddedResources.UnpackFromAssembly("IEDriverServer64.exe", "IEDriverServer.exe", Assembly.GetAssembly(typeof(SeleniumWebDriver)));
-                        container.Register<IWebDriver, Wrappers.IEDriverWrapper>().AsMultiInstance();
+                        driverPath = EmbeddedResources.UnpackFromAssembly("IEDriverServer64.exe", "IEDriverServer.exe", Assembly.GetAssembly(typeof(SeleniumWebDriver)));
+                        container.Register<IWebDriver>((c, o) => { return new IEDriverWrapper(Path.GetDirectoryName(driverPath)); });
                         break;
                     case Browser.Firefox:
-                        container.Register<IWebDriver, OpenQA.Selenium.Firefox.FirefoxDriver>().AsMultiInstance();
+                        container.Register<IWebDriver, OpenQA.Selenium.Firefox.FirefoxDriver>();
                         break;
                     case Browser.Chrome:
-                        EmbeddedResources.UnpackFromAssembly("chromedriver.exe", Assembly.GetAssembly(typeof(SeleniumWebDriver)));
-                        container.Register<IWebDriver, OpenQA.Selenium.Chrome.ChromeDriver>().AsMultiInstance();
+                        driverPath = EmbeddedResources.UnpackFromAssembly("chromedriver.exe", Assembly.GetAssembly(typeof(SeleniumWebDriver)));
+                        container.Register<IWebDriver>((c, o) => { return new ChromeDriver(Path.GetDirectoryName(driverPath)); });
                         break;
                     case Browser.PhantomJs:
-                        EmbeddedResources.UnpackFromAssembly("phantomjs.exe", Assembly.GetAssembly(typeof(SeleniumWebDriver)));
-                        container.Register<IWebDriver, OpenQA.Selenium.PhantomJS.PhantomJSDriver>().AsMultiInstance();
+                        driverPath = EmbeddedResources.UnpackFromAssembly("phantomjs.exe", Assembly.GetAssembly(typeof(SeleniumWebDriver)));
+                        container.Register<IWebDriver>((c, o) => { return new PhantomJSDriver(Path.GetDirectoryName(driverPath)); });
                         break;
                 }
             };
