@@ -133,7 +133,7 @@ namespace FluentAutomation
         {
             this.WaitUntil(conditionAction, Settings.DefaultWaitUntilTimeout);
         }
-
+        
         public void WaitUntil(Expression<Action> conditionAction, TimeSpan timeout)
         {
             this.Act(() =>

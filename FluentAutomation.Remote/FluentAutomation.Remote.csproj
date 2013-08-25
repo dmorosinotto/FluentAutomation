@@ -35,6 +35,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -42,6 +43,10 @@
     <Reference Include="System.Xml" />
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\packages\Newtonsoft.Json.4.5.1\lib\net40\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="WebDriver, Version=2.35.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Selenium.WebDriver.2.35.0\lib\net40\WebDriver.dll</HintPath>
     </Reference>
     <Reference Include="websocket-sharp">
       <HintPath>3rdPartyLib\websocket-sharp.dll</HintPath>
@@ -61,6 +66,10 @@
     <Compile Include="RemoteFluentTest.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\FluentAutomation.SeleniumWebDriver\FluentAutomation.SeleniumWebDriver.csproj">
+      <Project>{508e97d5-21ef-41dc-8fd1-a0eac0a637a4}</Project>
+      <Name>FluentAutomation.SeleniumWebDriver</Name>
+    </ProjectReference>
     <ProjectReference Include="..\FluentAutomation\FluentAutomation.csproj">
       <Project>{07D8DE59-3DEB-4722-B093-6FCC0B0F7FFF}</Project>
       <Name>FluentAutomation</Name>
